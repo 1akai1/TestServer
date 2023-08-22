@@ -1,20 +1,27 @@
 const express = require('express')
-const Mongoclient = require('mongodb').MongoClient
+const bodyParser = require('body-parser')
 const cors = require('cors')
-const multer = require('multer')
 
 const app = express()
 
+app.use(bodyParser.json())
 app.use(cors())
 
-const CONNECTION_STRING='mongodb+srv://admin:admin@cluster0.sszhxie.mongodb.net/?retryWrites=true&w=majority'
+// const posts = require('./routes/api/posts')
 
-const DATABASENAME = 'todoappdb'
-let database
+// app.use('/api/posts', posts)
 
-app.listen(5038,()=>{
-    Mongoclient.connect(CONNECTION_STRING,(error, client)=>{
-        database=client.db(DATABASENAME)
-        console.log('Mongo DB Conneced')
-    })
+// const port = process.env.PORT || 5000
+
+// app.listen(port, () => console.log(`Server stared on port ${port}`))
+
+app.post('/api/data', (req, res)=>{
+    const newData = req.body
+
+    res.json({message: 'Данные успешно добавлены'})
 })
+
+const port = 3000
+
+app.listen(port,()=>{
+    console.log(`Сервер запущен на порту ${port}`)})
