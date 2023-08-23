@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <buttond onclick="test()">Test</buttond>
+    <script>
+        const url = 'http://localhost:8888/api/add/'
+        const data = {'test2': 'los'}
+
+        function test(){
+            fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        }
+    </script>
+</body>
+</html>
