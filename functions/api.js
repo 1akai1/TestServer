@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const serverless = require('serverless-http');
-const { MongoClient} = require('mongodb');
+const { MongoClient, ServerApiVersion} = require('mongodb');
 const path = require('path');
 
 const app = express();
@@ -14,7 +14,13 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(bodyParser.json())
 
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, {
+  serverApi: {
+    version: ServerApiVersion.v1,
+    strict: true,
+    deprecationErrors: true,
+  }
+});
 
 async function run(callback) {
 
