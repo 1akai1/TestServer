@@ -5,7 +5,7 @@ const uri = "mongodb+srv://admin:<password>@cluster0.sszhxie.mongodb.net/?retryW
 
 const router = express.Router();
 
-
+let test
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -16,7 +16,9 @@ const client = new MongoClient(uri, {
 
 
 async function run() {
+
   try {
+    test = 'connecting'
     // Connect the client to the server	(optional starting in v4.7)
     await client.connect();
     // Send a ping to confirm a successful connection
@@ -26,14 +28,21 @@ async function run() {
     // Ensures that the client will close when you finish/error
     await client.close();
   }
+  test = 'connected'
 }
 
 // router.get('/', async (req, res) => {
 //     res.send('hello');
 //   });
 
-  router.get('/', async (req, res) => {
-  res.send(run().catch(console.dir));
+router.get('/', async (req, res) => {
+  try {
+    const result = await run();
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('An error occurred');
+  }
 });
 
 // Get Posts
