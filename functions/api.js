@@ -22,6 +22,25 @@ const client = new MongoClient(uri, {
   }
 });
 
+const mongoClient = new MongoClient(uri);
+const clientPromise = mongoClient.connect();
+
+const handler = async (event) => {
+  try {
+      const database = (await clientPromise).db('TestDB');
+      const collection = database.collection('posts');
+      const results = await collection.find({}).limit(10).toArray();
+      return {
+          statusCode: 200,
+          body: JSON.stringify(results),
+      }
+  } catch (error) {
+      return { statusCode: 500, body: error.toString() }
+  }
+}
+app.get('/get', handler )
+
+
 async function run(callback) {
 
   try {
@@ -35,20 +54,25 @@ async function run(callback) {
   }
 }
 
-router.get('/get', async (req, res) => {
-  try {
-    const result = await run(async (posts) => {
-      const result = await posts.find({}).limit(10).toArray()
-      return {
-        statusCode: 200,
-        body: JSON.stringify(result),
-    }
-    })
-    res.send(result);
-  } catch (error) {
-    res.status(500).send('error');
-  }
-});
+
+
+
+
+
+// router.get('/get', async (req, res) => {
+//   try {
+//     const result = await run(async (posts) => {
+//       const result = await posts.find({}, {maxTimeMS: 6000}).limit(10).toArray()
+//       return {
+//         statusCode: 200,
+//         body: JSON.stringify(result),
+//     }
+//     })
+//     res.send(result);
+//   } catch (error) {
+//     res.status(500).send('error');
+//   }
+// });
 
 router.post('/add',async (req, res) => {
   try {
